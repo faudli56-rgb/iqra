@@ -1,7 +1,7 @@
 // ==========================================
 // المحرك الأساسي للتواصل مع جوجل 
 // ==========================================
-const API_URL = "https://script.google.com/macros/s/AKfycbwLBXt7K6hcgrt_EBBxn-BS-jRTO8C2_mz4sF3JSzOfVG8GU1MzWNrHdKLbxFbRPnba/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxMog8gTa9QaTUX_36_RapCB4G0H4lyDTnr_n7X6BA76WDXp0343rfTnGA1yZ-uD8mzYg/exec";
 async function callGoogleAPI(action, params = []) {
     try {
         const response = await fetch(API_URL, {
