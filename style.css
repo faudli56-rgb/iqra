@@ -1,0 +1,82 @@
+body {
+        font-family: 'Cairo', sans-serif;
+        background-color: #F8FAFC;
+        background-image: linear-gradient(rgba(248, 250, 252, 0.95), rgba(248, 250, 252, 0.95)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1200');
+        background-attachment: fixed;
+        background-size: cover;
+        background-position: center;
+    }
+    /* العلامة المائية */
+    .watermark-bg {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-image: url('https://lh3.googleusercontent.com/d/1HiVQPEQOYKoIjifDJG4F4bWVf4K-UA66');
+        background-size: cover;
+        background-position: center;
+        opacity: 0.08; /* شفافية 10% */
+        z-index: -1;
+        pointer-events: none;
+    }
+    .nav-active { color: #D4A017 !important; border-bottom: 3px solid #D4A017; font-weight: bold; }
+    .page-section { display: none; }
+    .page-section.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+    .academy-hero {
+        background: linear-gradient(135deg, rgba(11, 31, 77, 0.98) 0%, rgba(19, 47, 107, 0.96) 100%),
+        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60"><path d="M0 0 L30 0 L15 30 Z" fill="%23D4A017" fill-opacity="0.03"/></svg>');
+        background-size: cover; background-position: center;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes textSlide {
+        0%, 25% { transform: translateY(0); }
+        30%, 55% { transform: translateY(-100%); }
+        60%, 85% { transform: translateY(-200%); }
+        90%, 100% { transform: translateY(0); }
+    }
+    .popup-slider { animation: textSlide 9s infinite; }
+    
+    /* تصميم السلايدر للإعلانات */
+    .slider-container { display: flex; transition: transform 0.5s ease-in-out; width: 100%; height: 100%; }
+    .slide { min-width: 100%; position: relative; flex-shrink: 0; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background-color: rgba(255,255,255,0.5); cursor: pointer; transition: 0.3s; }
+    .dot.active { background-color: #D4A017; transform: scale(1.3); }
+
+    /* اتجاه النصوص الإنجليزية (مثل اسم المستخدم وكلمة المرور) */
+    .dir-ltr { direction: ltr; }
+
+    /* تنسيقات الجداول في لوحة التحكم */
+    .admin-table-container {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+    .admin-table-container::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    .admin-table-container::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 4px;
+    }
+    .admin-table-container::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+    .admin-table-container::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+    
+    /* تنسيقات الكروت الإحصائية */
+    .stat-card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* نافذة تسجيل الدخول المنبثقة */
+    .modal-backdrop {
+        background-color: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(4px);
+    }
+#data-container {
+    display: none; /* إخفاء المكان حتى يتم جلب البيانات */

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>أكاديمية اقرأ</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="theme-color" content="#0B1F4D">
+
+<style>
+    /* تحسينات اللمس الإجبارية للجوال */
+    @media (max-width: 768px) {
+        html, body {
+            overflow-x: hidden !important;
+            width: 100%;
+        }
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+        
+        button, a, select, input, .cursor-pointer {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+    }
+</style>
+
+<script>
+    // 🌟 حماية الجوال من انهيار التخزين المحلي
+    function safeSetStorage(key, value) {
+        try { localStorage.setItem(key, value); } 
+        catch(e) { console.warn("Mobile tracking protection active - Storage ignored"); }
+    }
+    
+    function safeGetStorage(key) {
+        try { return localStorage.getItem(key); } 
+        catch(e) { return null; }
+    }
+
+    // 🌟 نظام قراءة كود المسوق من الرابط (متوافق مع Vercel)
+    window.onload = function() {
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const refCode = urlParams.get('ref') || urlParams.get('marketer');
+            if(refCode) {
+                safeSetStorage('marketerRef', refCode);
+                console.log("تم حفظ كود المسوق:", refCode);
+            }
+        } catch(e) {
+            console.warn("حدث خطأ في قراءة رابط المسوق");
+        }
+    };
+</script>
+</head>
+<body class="text-slate-800 bg-[#F8FAFC]">
+    
+<div class="watermark-bg"></div>
+
+<div id="urgent-alert-banner" class="bg-rose-600 text-white text-xs font-bold text-center py-2 hidden cursor-pointer" onclick="navigateTo('news')">
+    <i class="fas fa-exclamation-circle ml-1"></i> إعلان عاجل: <span id="urgent-alert-text"></span>
+</div>
+
+<header class="bg-[#0B1F4D] text-white shadow-xl sticky top-0 z-50 border-b border-[#132F6B]">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center relative">
+        <div class="flex items-center gap-3 cursor-pointer z-10" onclick="navigateTo('home')">
+            <img src="https://drive.google.com/thumbnail?id=1vcLrgWhcDhA5vOlei4WasRYKzU5YJ6qh&sz=w500" alt="أكاديمية إقرأ" class="w-12 h-12 bg-white rounded-xl object-contain border-2 border-[#D4A017] shadow-md p-1" loading="lazy">
+            <div>
+                <h1 class="text-md font-black text-white tracking-wide">أكاديمية إقرأ</h1>
+                <p class="text-[10px] text-[#D4A017] font-semibold tracking-wider">للاستشارات والتدريب</p>
+            </div>
+        </div>
+        
+        <nav class="hidden md:flex items-center space-x-5 space-x-reverse text-slate-200 font-medium text-sm">
+            <a id="btn-home" onclick="navigateTo('home')" class="cursor-pointer hover:text-[#D4A017] pb-1 nav-active">الرئيسية</a>
+            <a id="btn-courses" onclick="navigateTo('courses')" class="cursor-pointer hover:text-[#D4A017] pb-1">الدورات التدريبية</a>
+            <a id="btn-ads" onclick="navigateTo('ads')" class="cursor-pointer hover:text-[#D4A017] pb-1">الإعلانات</a>
+            <a id="btn-news" onclick="navigateTo('news')" class="cursor-pointer hover:text-[#D4A017] pb-1">الأخبار</a>
+            <a id="btn-verification" onclick="navigateTo('verification')" class="cursor-pointer hover:text-[#D4A017] pb-1">فحص الشهادات</a>
+            <a id="btn-contact" onclick="navigateTo('contact')" class="cursor-pointer hover:text-[#D4A017] pb-1">تواصل معنا</a>
+            <a onclick="openLoginModal()" class="cursor-pointer text-emerald-400 hover:text-emerald-500 font-bold flex items-center gap-1"><i class="fas fa-sign-in-alt"></i> دخول النظام</a>
+            <a onclick="navigateTo('register')" class="bg-[#D4A017] hover:bg-[#b88614] text-[#0B1F4D] px-4 py-2 rounded-xl font-bold transition shadow-md cursor-pointer">سجل الآن</a>
+        </nav>
+        
+        <div class="md:hidden z-50">
+            <button type="button" onclick="toggleMobileMenu()" class="text-white hover:text-[#D4A017] focus:outline-none text-2xl p-2 block cursor-pointer" style="-webkit-tap-highlight-color: transparent;">
+                <span id="menu-toggle-icon">&#9776;</span>
+            </button>
+        </div>
+    </div>
+    
+    <div id="mobile-menu" class="hidden md:hidden bg-[#071432] border-t border-[#132F6B] px-6 py-4 space-y-3 shadow-2xl relative z-40">
+        <a onclick="navigateTo('home'); toggleMobileMenu()" class="block text-slate-200 hover:text-[#D4A017] py-2 border-b border-slate-800/40 font-semibold cursor-pointer"><i class="fas fa-home ml-3 text-[#D4A017]"></i>الرئيسية</a>
+        <a onclick="navigateTo('courses'); toggleMobileMenu()" class="block text-slate-200 hover:text-[#D4A017] py-2 border-b border-slate-800/40 font-semibold cursor-pointer"><i class="fas fa-book-open ml-3 text-[#D4A017]"></i>الدورات</a>
+        <a onclick="navigateTo('verification'); toggleMobileMenu()" class="block text-slate-200 hover:text-[#D4A017] py-2 border-b border-slate-800/40 font-semibold cursor-pointer"><i class="fas fa-award ml-3 text-[#D4A017]"></i>فحص الشهادات</a>
+        <a onclick="navigateTo('contact'); toggleMobileMenu()" class="block text-slate-200 hover:text-[#D4A017] py-2 border-b border-slate-800/40 font-semibold cursor-pointer"><i class="fas fa-envelope ml-3 text-[#D4A017]"></i>تواصل معنا</a>
+        <a onclick="openLoginModal(); toggleMobileMenu()" class="block text-emerald-400 font-bold py-2 cursor-pointer"><i class="fas fa-sign-in-alt ml-3 text-emerald-500"></i>دخول النظام</a>
+        <a onclick="navigateTo('register'); toggleMobileMenu()" class="block bg-[#D4A017] text-center text-[#0B1F4D] font-black py-3 rounded-xl shadow-lg mt-2 cursor-pointer">سجل الآن</a>
+    </div>
+</header>
+
+<div onclick="trackButtonClick('WhatsApp_Float'); window.open('https://wa.me/967777644293', '_blank')" class="fixed bottom-6 left-6 bg-[#25D366] text-white px-4 py-2.5 rounded-full shadow-2xl z-50 flex items-center gap-2 cursor-pointer hover:scale-105 transition active:scale-95 border border-white/20 select-none">
+    <i class="fab fa-whatsapp text-2xl"></i>
+    <div class="text-right">
+        <div class="text-[12px] font-black leading-none mt-1">التواصل مع الإدارة</div>
+    </div>
+</div>
+
+<div id="welcome-popup" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl text-right relative">
+        <div class="bg-[#0B1F4D] p-6 text-center relative">
+            <button onclick="closePopup()" class="absolute top-4 left-4 text-white/70 hover:text-white text-xl cursor-pointer">✕</button>
+            <div class="w-14 h-14 bg-[#D4A017]/15 rounded-2xl flex items-center justify-center mx-auto mb-3 text-[#D4A017] text-2xl"><i class="fas fa-bell"></i></div>
+            <h3 class="text-lg font-bold text-white">مستجدات وإعلانات الأكاديمية</h3>
+        </div>
+        <div class="p-6 text-center space-y-4">
+            <div class="h-12 overflow-hidden relative bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center px-4">
+                <div class="absolute w-full space-y-12 popup-slider top-3 text-xs font-bold text-[#0B1F4D]">
+                    <div class="h-12 flex items-center justify-center gap-1.5 text-amber-600">🎉 خصومات التسجيل متاحة الآن للجميع</div>
+                    <div class="h-12 flex items-center justify-center gap-1.5 text-blue-900">🚀 دورة الذكاء الاصطناعي تبدأ قريباً</div>
+                    <div class="h-12 flex items-center justify-center gap-1.5 text-emerald-600">📢 التسجيل مفتوح حالياً للبرامج المهنية</div>
+                </div>
+            </div>
+            <button onclick="popupActionRegister()" class="w-full bg-[#D4A017] hover:bg-[#b88614] text-[#0B1F4D] font-black py-3 rounded-xl text-xs shadow-md transition cursor-pointer">سجل الآن</button>
+        </div>
+    </div>
+</div>
+
+<div id="loginModal" class="fixed inset-0 modal-backdrop z-[60] hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full overflow-hidden shadow-2xl text-right relative p-8 border border-slate-200">
+        <button onclick="closeLoginModal()" class="absolute top-4 left-4 text-slate-400 hover:text-rose-500 text-xl cursor-pointer transition">✕</button>
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-3 text-[#0B1F4D] text-3xl border border-slate-100"><i class="fas fa-user-lock"></i></div>
+            <h3 class="text-xl font-black text-[#0B1F4D]">بوابة الدخول للنظام</h3>
+            <p class="text-xs text-slate-500 mt-1">للمدربين، المسوقين، والإدارة فقط</p>
+        </div>
+        <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">اسم المستخدم</label>
+                <input type="text" id="loginUser" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#D4A017] focus:outline-none text-sm text-left dir-ltr" placeholder="Username">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">كلمة المرور</label>
+                <input type="password" id="loginPass" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#D4A017] focus:outline-none text-sm text-left dir-ltr" placeholder="••••••••">
+            </div>
+            <button type="submit" id="loginSubmitBtn" class="w-full bg-[#0B1F4D] hover:bg-[#132F6B] text-white font-black py-3 rounded-xl transition mt-2 shadow-md cursor-pointer">دخول</button>
+        </form>
+    </div>
+</div>
+
+    <div id="main-content">
+        <section id="page-home" class="page-section active">
+    <div class="academy-hero text-white py-20 px-4 text-center relative overflow-hidden">
+        <div class="relative z-10 max-w-4xl mx-auto">
+            <img src="https://drive.google.com/thumbnail?id=1vcLrgWhcDhA5vOlei4WasRYKzU5YJ6qh&sz=w500" alt="شعار" class="w-24 h-24 bg-white rounded-3xl object-contain mx-auto mb-6 border-2 border-[#D4A017] shadow-2xl p-2" loading="lazy">
+            <h2 class="text-3xl md:text-5xl font-black mb-8 text-white leading-tight">مرحباً بكم في أكاديمية اقرأ للاستشارات والتدريب</h2>
+            <p class="text-xs md:text-sm text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed px-2">منصة رقمية متكاملة للتدريب والتأهيل المهني والاستشارات، تضم برامج تدريبية متخصصة وشهادات معتمدة في مختلف المجالات.</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto bg-slate-900/50 backdrop-blur-md p-5 rounded-2xl border border-slate-800/40 shadow-xl mb-12 text-right">
+                <div class="p-2 flex items-center gap-3"><span class="text-2xl">📚</span><div><div id="stat-courses-count" class="text-xl font-black text-[#D4A017]">85+</div><div class="text-[10px] text-slate-400">دورة تدريبية</div></div></div>
+                <div class="p-2 flex items-center gap-3 border-r border-slate-800/60"><span class="text-2xl">🎓</span><div><div id="stat-students-count" class="text-xl font-black text-[#D4A017]">3500+</div><div class="text-[10px] text-slate-400">متدرب خريج</div></div></div>
+                <div class="p-2 flex items-center gap-3 border-r border-slate-800/60"><span class="text-2xl">👨‍🏫</span><div><div id="stat-trainers-count" class="text-xl font-black text-[#D4A017]">50+</div><div class="text-[10px] text-slate-400">مدرب وخبير</div></div></div>
+                <div class="p-2 flex items-center gap-3 border-r border-slate-800/60"><span class="text-2xl">📜</span><div><div id="stat-certs-count" class="text-xl font-black text-[#D4A017]">200+</div><div class="text-[10px] text-slate-400">شهادة صادرة</div></div></div>
+            </div>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 max-w-md mx-auto px-4">
+                <button onclick="trackButtonClick('Explore_Courses_Hero'); navigateTo('courses')" class="bg-[#D4A017] hover:bg-[#b88614] text-[#0B1F4D] font-black px-8 py-3.5 rounded-xl shadow-xl w-full text-xs flex items-center justify-center gap-1.5 cursor-pointer">🟨 استكشف الدورات</button>
+                <button onclick="trackButtonClick('Verify_Certs_Hero'); navigateTo('verification')" class="bg-white hover:bg-slate-50 text-[#0B1F4D] font-black px-8 py-3.5 rounded-xl shadow-md w-full text-xs flex items-center justify-center gap-1.5 cursor-pointer">⬜ تحقق من الشهادات</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-[#F8F9FA]/80 backdrop-blur-sm py-16 border-b border-slate-100 relative z-10">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-10"><h3 class="text-2xl font-black text-[#0B1F4D]">🔥 البرامج والدورات الأكثر طلباً</h3></div>
+            <div id="home-featured-courses" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+    </div>
+<div class="bg-[#F8F9FA]/90 backdrop-blur-sm py-16 relative z-10">
+        <div class="text-center mb-12"><h3 class="text-2xl font-black text-[#0B1F4D]">⭐ تقييمات وآراء المتدربين</h3></div>
+        <div id="testimonials-dynamic-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 text-right"></div>
+    </div>
+    <div class="bg-white/90 backdrop-blur-sm py-16 border-b border-slate-100 relative z-10">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12"><h3 class="text-2xl font-black text-[#0B1F4D]">📌 مسارات وخدمات الأكاديمية</h3></div>
+            <div id="services-grid-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-right">
+                <div class="p-6 bg-[#F8F9FA] rounded-2xl border border-slate-100 hover:shadow-lg transition">
+                    <div class="text-3xl text-[#D4A017] mb-4"><i class="fas fa-laptop-code"></i></div>
+                    <h4 class="font-bold text-[#0B1F4D] text-lg mb-2">الدورات التقنية</h4>
+                    <p class="text-xs text-slate-500">برمجة، شبكات، وذكاء اصطناعي.</p>
+                </div>
+                <div class="p-6 bg-[#F8F9FA] rounded-2xl border border-slate-100 hover:shadow-lg transition">
+                    <div class="text-3xl text-[#D4A017] mb-4"><i class="fas fa-chart-line"></i></div>
+                    <h4 class="font-bold text-[#0B1F4D] text-lg mb-2">الإدارة والأعمال</h4>
+                    <p class="text-xs text-slate-500">تطوير المهارات القيادية والمحاسبة.</p>
+                </div>
+                <div class="p-6 bg-[#F8F9FA] rounded-2xl border border-slate-100 hover:shadow-lg transition">
+                    <div class="text-3xl text-[#D4A017] mb-4"><i class="fas fa-language"></i></div>
+                    <h4 class="font-bold text-[#0B1F4D] text-lg mb-2">اللغات والترجمة</h4>
+                    <p class="text-xs text-slate-500">دورات تأسيسية ومتقدمة في اللغات.</p>
+                </div>
+                <div class="p-6 bg-[#F8F9FA] rounded-2xl border border-slate-100 hover:shadow-lg transition">
+                    <div class="text-3xl text-[#D4A017] mb-4"><i class="fas fa-handshake"></i></div>
+                    <h4 class="font-bold text-[#0B1F4D] text-lg mb-2">الاستشارات</h4>
+                    <p class="text-xs text-slate-500">استشارات مهنية وتطوير مؤسسي.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="page-courses" class="page-section container mx-auto px-4 py-16 relative z-10">
+    <div class="text-center mb-10"><h2 class="text-3xl font-black text-[#0B1F4D]">دليل البرامج التدريبية المتاحة</h2></div>
+    <div class="flex flex-wrap justify-center gap-2 mb-8">
+        <button onclick="filterCourses('all')" class="bg-[#0B1F4D] text-white px-5 py-2 rounded-xl text-xs font-semibold shadow cursor-pointer">الكل</button>
+        <button onclick="filterCourses('إدارية')" class="bg-white text-gray-600 hover:bg-gray-100 px-5 py-2 rounded-xl text-xs font-semibold shadow border border-gray-200 cursor-pointer">دورات إدارية</button>
+        <button onclick="filterCourses('تقنية')" class="bg-white text-gray-600 hover:bg-gray-100 px-5 py-2 rounded-xl text-xs font-semibold shadow border border-gray-200 cursor-pointer">دورات تقنية</button>
+        <button onclick="filterCourses('تأهيلية')" class="bg-white text-gray-600 hover:bg-gray-100 px-5 py-2 rounded-xl text-xs font-semibold shadow border border-gray-200 cursor-pointer">دورات تأهيلية</button>
+    </div>
+    <div id="courses-list-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+</section>
+
+<section id="page-ads" class="page-section container mx-auto px-4 py-16 relative z-10">
+    <div class="text-center mb-10"><h2 class="text-3xl font-black text-[#0B1F4D]">سلايدر العروض والإعلانات التفاعلية</h2></div>
+    <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden relative h-[450px] border border-slate-100 group">
+        <div id="ads-slider-container" class="slider-container"></div>
+        <button onclick="moveAdSlide(-1)" class="absolute top-1/2 right-4 -translate-y-1/2 bg-white/80 hover:bg-white text-[#0B1F4D] w-10 h-10 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition cursor-pointer z-20"><i class="fas fa-chevron-right"></i></button>
+        <button onclick="moveAdSlide(1)" class="absolute top-1/2 left-4 -translate-y-1/2 bg-white/80 hover:bg-white text-[#0B1F4D] w-10 h-10 rounded-full flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition cursor-pointer z-20"><i class="fas fa-chevron-left"></i></button>
+        <div id="ads-dots-container" class="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-20"></div>
+    </div>
+</section>
+
+<section id="page-news" class="page-section container mx-auto px-4 py-16 relative z-10">
+    <div class="text-center mb-8"><h2 class="text-3xl font-black text-[#0B1F4D]">غرفة الأخبار والمستجدات الرسمية</h2></div>
+    <div class="max-w-md mx-auto mb-10 relative">
+        <input type="text" id="news-search" onkeyup="searchNews()" placeholder="ابحث في الأخبار والفعاليات..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 shadow-sm focus:ring-2 focus:ring-[#D4A017] focus:outline-none text-sm text-right">
+        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+    </div>
+    <div id="news-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto"></div>
+</section>
+
+<section id="page-verification" class="page-section container mx-auto px-4 py-16 relative z-10">
+    <div class="max-w-xl mx-auto bg-white rounded-3xl shadow-xl p-8 border border-slate-100 text-center">
+        <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-[#0B1F4D] text-2xl border border-blue-100"><i class="fas fa-shield-halved"></i></div>
+        <h2 class="text-2xl font-black text-[#0B1F4D] mb-2">بوابة فحص وتوثيق الشهادات المعتمدة</h2>
+        <p class="text-xs text-slate-500 max-w-sm mx-auto mb-8">أدخل رقم الشهادة الموحد الصادر من الأكاديمية للتأكد من القيود الرسمية.</p>
+        <div class="space-y-4 max-w-md mx-auto">
+            <input type="text" id="cert-search-input" class="w-full px-5 py-3 rounded-xl border border-slate-300 text-center text-lg font-bold tracking-wider focus:ring-2 focus:ring-[#D4A017] focus:outline-none" placeholder="مثال: IQR-2026-001">
+            <button onclick="runCertificateVerification()" class="w-full bg-[#0B1F4D] hover:bg-[#132F6B] text-white font-bold py-3.5 rounded-xl transition shadow cursor-pointer">استخراج بيانات القيد والشهادة</button>
+        </div>
+        <div id="cert-result-box" class="mt-8 hidden p-6 rounded-2xl border text-right"></div>
+    </div>
+</section>
+
+<section id="page-register" class="page-section container mx-auto px-4 py-16 relative z-10">
+    <div class="max-w-2xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
+        <div class="bg-[#0B1F4D] p-6 text-center text-white border-b border-[#132F6B]">
+            <h2 class="text-2xl font-black">استمارة طلب التسجيل بالبرامج التدريبية</h2>
+            <p class="text-slate-300 text-xs mt-1">الرجاء تدوين البيانات بدقة لربطها بملفات القبول الآلية</p>
+        </div>
+        <form id="registration-form" onsubmit="handleNewRegistration(event)" class="p-8 space-y-5 text-right">
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">الاسم الرباعي (بالعربية) *</label>
+                <input type="text" id="reg-name-ar" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#D4A017] bg-slate-50/50 text-sm">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">الاسم الرباعي (بالإنجليزية) *</label>
+                <input type="text" id="reg-name-en" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#D4A017] text-left bg-slate-50/50 text-sm dir-ltr">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">الجنس *</label>
+                    <select id="reg-gender" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#D4A017] bg-white text-sm">
+                        <option value="">-- اختر الجنس --</option><option value="ذكر">ذكر</option><option value="أنثى">أنثى</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">المؤهل الدراسي *</label>
+                    <select id="reg-degree" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#D4A017] bg-white text-sm">
+                        <option value="">-- اختر المؤهل --</option><option value="ثانوي">ثانوي</option><option value="دبلوم">دبلوم</option><option value="بكالوريوس">بكالوريوس</option><option value="ماجستير">ماجستير</option><option value="أخرى">أخرى</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">رقم الواتساب *</label>
+                    <input type="tel" id="reg-whatsapp" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#D4A017] text-left bg-slate-50/50 text-sm dir-ltr" placeholder="+967...">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">الجنسية *</label>
+                    <input type="text" id="reg-nationality" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#D4A017] bg-slate-50/50 text-sm">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">المحافظة / المدينة *</label>
+                    <input type="text" id="reg-governorate" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#D4A017] bg-slate-50/50 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">بلد الإقامة الحالي</label>
+                    <input type="text" id="reg-residence" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#D4A017] bg-slate-50/50 text-sm">
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">منصة التدريب المفضلة *</label>
+                    <select id="reg-platform" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#D4A017] bg-white text-sm">
+                        <option value="حسب ما تحدده الأكاديمية">حسب ما تحدده الأكاديمية</option><option value="واتساب">واتساب</option><option value="Zoom">Zoom</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">الدورة التدريبية المطلوبة *</label>
+                    <select id="reg-course" required onchange="showSelectedCourseDetails()" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-[#D4A017] bg-white text-sm"></select>
+                </div>
+            </div>
+            
+            <div id="course-dynamic-info" class="hidden bg-blue-50 border border-blue-100 rounded-xl p-4 text-xs space-y-2 text-slate-700"></div>
+            
+            <button type="submit" id="submit-btn" class="w-full bg-[#0B1F4D] hover:bg-[#132F6B] text-white font-bold py-3 rounded-xl transition text-sm cursor-pointer shadow-md">تأكيد التسجيل وإصدار رقم الطلب</button>
+            
+            <div id="successMessage" class="hidden mt-4 p-5 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-center space-y-3 shadow-inner">
+                <div class="text-3xl"><i class="fas fa-check-circle text-emerald-500"></i></div>
+                <div class="font-black text-lg">تم تسجيلك بنجاح!</div>
+                <div class="text-sm">رقم الطلب الخاص بك للرجوع إليه هو: <span id="displayOrderID" class="font-black text-[#0B1F4D] bg-white px-3 py-1 rounded-lg shadow-sm"></span></div>
+                <p class="text-xs text-slate-600 font-bold mt-2">يرجى الانضمام لقناة الواتساب الرسمية لمتابعة موعد بدء الدورة:</p>
+                <a href="https://whatsapp.com/channel/0029VbCDK6M4IBhBR3jvVY0Y" target="_blank" class="bg-[#25D366] hover:bg-[#1ebd5a] text-white px-6 py-2.5 rounded-xl inline-flex items-center gap-2 font-bold shadow-md transition mt-2"><i class="fab fa-whatsapp text-xl"></i> انضم لقناة الأكاديمية الآن</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+<section id="page-contact" class="page-section container mx-auto px-4 py-16 relative z-10">
+    <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
+        <div class="p-8 bg-[#0B1F4D] text-white flex flex-col justify-between text-right relative overflow-hidden">
+            <div class="relative z-10">
+                <h2 class="text-3xl font-black mb-4 text-[#D4A017]">تواصل معنا المباشر</h2>
+                <p class="text-slate-300 text-xs leading-relaxed mb-8">نحن هنا للإجابة على استفساراتك. اختر الوسيلة الأنسب لك للتواصل الفوري مع إدارة الأكاديمية.</p>
+                <div class="space-y-5 text-sm font-bold">
+                    <a href="https://wa.me/967777644293" target="_blank" class="flex items-center gap-4 hover:translate-x-[-5px] transition cursor-pointer p-3 rounded-xl hover:bg-white/10 border border-transparent hover:border-white/20">
+                        <div class="w-10 h-10 bg-[#25D366] rounded-full flex items-center justify-center text-xl shadow-lg"><i class="fab fa-whatsapp"></i></div>
+                        <div>محادثة واتساب<div class="text-[10px] text-slate-400 font-normal">استجابة سريعة</div></div>
+                    </a>
+                    <a href="tel:+967777644293" class="flex items-center gap-4 hover:translate-x-[-5px] transition cursor-pointer p-3 rounded-xl hover:bg-white/10 border border-transparent hover:border-white/20">
+                        <div class="w-10 h-10 bg-sky-500 rounded-full flex items-center justify-center text-lg shadow-lg"><i class="fas fa-phone-alt"></i></div>
+                        <div>اتصال هاتفي<div class="text-[10px] text-slate-400 font-normal">+967 777 644 293</div></div>
+                    </a>
+                    <a href="mailto:aqraakadymyt51@gmail.com" class="flex items-center gap-4 hover:translate-x-[-5px] transition cursor-pointer p-3 rounded-xl hover:bg-white/10 border border-transparent hover:border-white/20">
+                        <div class="w-10 h-10 bg-rose-500 rounded-full flex items-center justify-center text-lg shadow-lg"><i class="fas fa-envelope"></i></div>
+                        <div>البريد الإلكتروني<div class="text-[10px] text-slate-400 font-normal">aqraakadymyt51@gmail.com</div></div>
+                    </a>
+                </div>
+            </div>
+            <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl"></div>
+        </div>
+        
+        <form onsubmit="handleContactSubmit(event)" class="p-8 space-y-5 text-right">
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">الاسم الكريم</label>
+                <input type="text" id="contact-name" placeholder="اكتب اسمك هنا" required class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-[#D4A017] focus:outline-none bg-slate-50/50">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">نوع الرسالة</label>
+                    <select id="contact-type" required class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-[#D4A017] focus:outline-none bg-white">
+                        <option value="استفسار">استفسار عام</option><option value="اقتراح">اقتراح</option><option value="شكوى">شكوى</option><option value="طلب دورة">طلب دورة مخصصة</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">طريقة الإرسال المباشرة</label>
+                    <select id="contact-method" required class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:ring-2 focus:ring-[#D4A017] focus:outline-none bg-white">
+                        <option value="whatsapp">تحويل إلى الواتساب</option><option value="email">تحويل إلى الإيميل</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">تفاصيل الرسالة</label>
+                <textarea id="contact-msg" rows="4" placeholder="كيف يمكننا مساعدتك اليوم؟..." required class="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-[#D4A017] focus:outline-none bg-slate-50/50"></textarea>
+            </div>
+            <button type="submit" id="contact-submit-btn" class="w-full bg-[#D4A017] hover:bg-[#b88614] transition text-[#0B1F4D] font-black py-3.5 rounded-xl text-sm cursor-pointer shadow-md flex justify-center items-center gap-2">
+                <i class="fas fa-paper-plane"></i> إرسال الرسالة الآن
+            </button>
+        </form>
+    </div>
+</section>
+
+    </div>
+    
+    <div id="admin-content" style="display: none;">
+        <div class="p-4 md:p-8">
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 bg-white p-5 rounded-3xl shadow-sm border border-slate-100">
+        <h1 class="text-2xl font-black text-[#0B1F4D]"><i class="fas fa-cogs ml-2 text-[#D4A017]"></i> لوحة تحكم الإدارة</h1>
+        <div class="flex gap-4 items-center">
+            <div class="text-xs md:text-sm font-bold text-slate-600 bg-slate-50 px-4 py-2 rounded-xl border border-slate-100 shadow-inner">
+                مرحباً <span id="userNameDisplay" class="text-[#D4A017]"></span> (<span id="userRoleDisplay"></span>)
+            </div>
+            <button onclick="logout()" class="bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white px-4 py-2 rounded-xl font-bold transition shadow-sm text-xs md:text-sm flex items-center gap-1"><i class="fas fa-sign-out-alt"></i> خروج</button>
+        </div>
+    </div>
+
+    <div class="flex flex-wrap gap-2 mb-6 bg-white p-2 rounded-2xl shadow-sm border border-slate-100">
+        <button id="tab-btn-stats" onclick="switchAdminTab('tab-stats', this)" class="admin-tab-btn flex-1 bg-[#0B1F4D] text-white px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold shadow transition"><i class="fas fa-chart-pie ml-1.5 text-[#D4A017]"></i> الإحصائيات</button>
+        <button id="tab-btn-users" onclick="switchAdminTab('tab-users', this)" class="admin-tab-btn flex-1 bg-transparent text-slate-600 hover:bg-slate-50 px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition"><i class="fas fa-users ml-1.5"></i> <span id="tab-title-users">إدارة المتدربين</span></button>
+        <button id="tab-btn-content" onclick="switchAdminTab('tab-content', this)" class="admin-tab-btn flex-1 bg-transparent text-slate-600 hover:bg-slate-50 px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition"><i class="fas fa-layer-group ml-1.5"></i> الدورات والأخبار</button>
+        <button id="tab-btn-settings" onclick="switchAdminTab('tab-settings', this)" class="admin-tab-btn flex-1 bg-transparent text-slate-600 hover:bg-slate-50 px-4 py-2.5 rounded-xl text-xs md:text-sm font-bold transition"><i class="fas fa-cog ml-1.5"></i> الإعدادات</button>
+    </div>
+
+    <div id="tab-stats" class="admin-tab-content block">
+        <div id="marketer-link-box" class="hidden bg-emerald-50 border border-emerald-200 p-5 rounded-2xl mb-6 shadow-sm">
+            <h3 class="text-sm font-black text-emerald-800 mb-3"><i class="fas fa-link ml-2"></i> رابط التسويق الخاص بك (انسخه وشاركه مع الطلاب):</h3>
+            <div class="flex flex-col md:flex-row gap-3">
+                <input type="text" id="marketer-link-input" readonly class="w-full px-4 py-3 rounded-xl border border-emerald-200 bg-white text-left dir-ltr text-xs md:text-sm font-bold text-slate-600 focus:outline-none shadow-inner">
+                <button onclick="copyMarketerLink()" id="btn-copy-link" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-xl text-xs font-bold transition shadow-md whitespace-nowrap"><i class="fas fa-copy ml-1"></i> نسخ الرابط</button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md transition">
+                <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-2xl border border-blue-100"><i class="fas fa-user-graduate"></i></div>
+                <div><div class="text-[11px] text-slate-500 font-bold mb-1">إجمالي المتدربين</div><div class="text-2xl font-black text-[#0B1F4D]">0</div></div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md transition">
+                <div class="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl border border-emerald-100"><i class="fas fa-certificate"></i></div>
+                <div><div class="text-[11px] text-slate-500 font-bold mb-1">الشهادات الصادرة</div><div class="text-2xl font-black text-[#0B1F4D]">0</div></div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md transition">
+                <div class="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-2xl border border-amber-100"><i class="fas fa-handshake"></i></div>
+                <div><div class="text-[11px] text-slate-500 font-bold mb-1">المسوقين النشطين</div><div class="text-2xl font-black text-[#0B1F4D]">0</div></div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4 hover:shadow-md transition">
+                <div class="w-14 h-14 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-2xl border border-rose-100"><i class="fas fa-wallet"></i></div>
+                <div><div class="text-[11px] text-slate-500 font-bold mb-1">الإيرادات (دولار)</div><div class="text-2xl font-black text-[#0B1F4D]">0$</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-users" class="admin-tab-content hidden">
+        <div class="bg-white p-5 shadow-sm border border-slate-100 rounded-3xl">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-5 gap-3">
+                <h2 class="font-bold text-[#0B1F4D] text-sm"><i class="fas fa-list-alt ml-2 text-[#D4A017]"></i>سجل الطلبات الحية</h2>
+                <div class="flex gap-2 w-full md:w-auto">
+                 <input type="text" id="admin-search-box" onkeyup="filterAdminTable()" placeholder="بحث برقم الطلب أو الاسم..." class="px-4 py-2 border border-slate-200 rounded-xl text-xs w-full md:w-64 focus:ring-2 focus:ring-[#D4A017] focus:outline-none bg-slate-50">
+                    <button class="bg-[#0B1F4D] text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-[#132F6B] transition"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            <div class="overflow-x-auto admin-table-container rounded-xl border border-slate-100">
+                <table class="w-full text-right text-xs border-collapse">
+                    <thead class="bg-slate-100 text-slate-600 sticky top-0 shadow-sm">
+                        <tr>
+                            <th class="p-3.5 font-bold">رقم الطلب</th>
+                            <th class="p-3.5 font-bold">الاسم</th>
+                            <th class="p-3.5 font-bold">الدورة</th>
+                            <th class="p-3.5 font-bold">الحالة</th>
+                            <th id="actionColumn" class="p-3.5 font-bold text-center hidden">الإجراءات والتحكم</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTableBody" class="text-slate-700 divide-y divide-slate-100"></tbody>
+                </table>
+            </div>
+            <div class="flex justify-between items-center mt-5">
+                <div class="text-xs text-slate-500 font-bold bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">إجمالي السجلات: <span id="totalRecordsCount" class="text-[#0B1F4D] text-sm">0</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tab-content" class="admin-tab-content hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-6 shadow-sm border border-slate-100 rounded-3xl relative overflow-hidden flex flex-col">
+                <div class="absolute top-0 right-0 w-2 h-full bg-emerald-500"></div>
+                <h2 class="font-bold text-[#0B1F4D] mb-5 text-sm"><i class="fas fa-plus-circle ml-2 text-emerald-500 text-lg"></i>نشر مسار تدريبي جديد</h2>
+                <form id="form-add-course" onsubmit="handleAddCourse(event)" class="space-y-3 mb-6">
+                    <input type="text" id="adm-course-title" placeholder="اسم الدورة التدريبية" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-xs bg-slate-50">
+                    <input type="text" id="adm-course-trainer" placeholder="اسم المحاضر / المدرب" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-xs bg-slate-50">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="text" id="adm-course-fee" placeholder="رسوم الدورة (مثال: 10$)" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-xs bg-slate-50">
+                        <select id="adm-course-cat" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-xs bg-white"><option>تقنية</option><option>إدارية</option><option>لغات</option><option>تأهيلية</option></select>
+                    </div>
+                    <input type="text" id="adm-course-duration" placeholder="مدة الدورة (مثال: شهر واحد)" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-xs bg-slate-50">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-500 mb-1">صورة غلاف الدورة (اختياري)</label>
+                        <input type="file" id="adm-course-img" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+                    </div>
+                    <button type="submit" id="btn-submit-course" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl text-xs transition shadow-md mt-2">اعتماد ونشر المسار</button>
+                </form>
+                
+                <div class="border-t border-slate-100 pt-4 flex-1">
+                    <h3 class="font-bold text-[#0B1F4D] text-xs mb-3"><i class="fas fa-list ml-1 text-slate-400"></i> الدورات المنشورة حالياً</h3>
+                    <div id="admin-courses-list" class="space-y-2 max-h-40 overflow-y-auto pr-1"></div>
+                </div>
+            </div>
+            
+<div class="bg-slate-50 p-5 rounded-2xl border border-slate-100 mt-6">
+    <h3 class="font-bold text-[#0B1F4D] text-sm mb-3"><i class="fas fa-star text-amber-500"></i> إدارة آراء العملاء</h3>
+    <div class="flex gap-2 mb-3">
+        <input type="text" id="adm-test-name" placeholder="اسم العميل" class="w-1/3 px-3 py-2 border rounded-xl text-xs">
+        <select id="adm-test-rating" class="w-1/4 px-3 py-2 border rounded-xl text-xs">
+            <option value="5">⭐⭐⭐⭐⭐</option>
+            <option value="4">⭐⭐⭐⭐</option>
+            <option value="3">⭐⭐⭐</option>
+        </select>
+        <input type="text" id="adm-test-text" placeholder="الرأي..." class="flex-1 px-3 py-2 border rounded-xl text-xs">
+        <button onclick="addTestimonial()" class="bg-[#0B1F4D] text-white px-4 py-2 rounded-xl text-xs font-bold">إضافة</button>
+    </div>
+            <div class="bg-white p-6 shadow-sm border border-slate-100 rounded-3xl relative overflow-hidden flex flex-col">
+                <div class="absolute top-0 right-0 w-2 h-full bg-sky-500"></div>
+                <h2 class="font-bold text-[#0B1F4D] mb-5 text-sm"><i class="fas fa-bullhorn ml-2 text-sky-500 text-lg"></i>بث خبر أو إعلان عاجل</h2>
+                <form id="form-add-news" onsubmit="handleAddNews(event)" class="space-y-3 mb-6">
+                    <input type="text" id="adm-news-title" placeholder="عنوان الخبر / الإعلان" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-xs bg-slate-50">
+                    <textarea id="adm-news-details" placeholder="اكتب تفاصيل الخبر هنا..." rows="3" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-xs bg-slate-50"></textarea>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-500 mb-1">صورة مرفقة للخبر (اختياري)</label>
+                        <input type="file" id="adm-news-img" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 cursor-pointer">
+                    </div>
+                    <button type="submit" id="btn-submit-news" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 rounded-xl text-xs transition shadow-md mt-2">تعميم ونشر الخبر</button>
+                </form>
+
+                <div class="border-t border-slate-100 pt-4 flex-1">
+                    <h3 class="font-bold text-[#0B1F4D] text-xs mb-3"><i class="fas fa-list ml-1 text-slate-400"></i> الأخبار المنشورة حالياً</h3>
+                    <div id="admin-news-list" class="space-y-2 max-h-40 overflow-y-auto pr-1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="edit-course-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white p-6 rounded-2xl max-w-md w-full shadow-2xl">
+        <h3 class="font-bold text-[#0B1F4D] mb-4 text-lg border-b pb-2">تعديل بيانات الدورة</h3>
+        <input type="hidden" id="edit-course-id">
+        <div class="space-y-3">
+            <input type="text" id="edit-title" placeholder="اسم الدورة" class="w-full px-3 py-2 border rounded-lg text-sm">
+            <input type="text" id="edit-trainer" placeholder="اسم المدرب" class="w-full px-3 py-2 border rounded-lg text-sm">
+            <input type="text" id="edit-dur" placeholder="المدة" class="w-full px-3 py-2 border rounded-lg text-sm">
+            <input type="text" id="edit-fee" placeholder="الرسوم" class="w-full px-3 py-2 border rounded-lg text-sm">
+            <input type="text" id="edit-cat" placeholder="الفئة" class="w-full px-3 py-2 border rounded-lg text-sm">
+        </div>
+        <div class="flex gap-2 mt-5">
+            <button onclick="submitCourseEdit()" class="flex-1 bg-emerald-600 text-white py-2 rounded-lg font-bold text-sm">حفظ التعديلات</button>
+            <button onclick="document.getElementById('edit-course-modal').classList.add('hidden')" class="bg-slate-300 text-slate-800 px-4 py-2 rounded-lg font-bold text-sm">إلغاء</button>
+        </div>
+    </div>
+</div>
+    <div id="admin-testimonials-list" class="space-y-2 max-h-32 overflow-y-auto"></div>
+</div>
+
+    <div id="tab-settings" class="admin-tab-content hidden">
+        <div class="bg-white p-6 md:p-8 shadow-sm border border-slate-100 rounded-3xl max-w-4xl mx-auto relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-full h-1 bg-gradient-to-l from-[#0B1F4D] to-[#D4A017]"></div>
+            <h2 class="font-black text-[#0B1F4D] mb-8 text-xl"><i class="fas fa-sliders-h ml-2 text-[#D4A017]"></i>لوحة التحكم العامة للمنصة</h2>
+            <form id="form-settings" class="space-y-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1.5 ml-1">اسم الأكاديمية الرسمي</label>
+                        <input type="text" id="set-name" value="أكاديمية اقرأ للاستشارات والتدريب" class="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm font-bold text-[#0B1F4D] bg-slate-50">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1.5 ml-1">رقم الواتساب الخاص بالدعم</label>
+                        <input type="text" id="set-whatsapp" value="+967777644293" class="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm font-bold text-[#0B1F4D] dir-ltr text-left bg-slate-50">
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1.5 ml-1">البريد الإلكتروني للإدارة</label>
+                        <input type="text" id="set-email" value="aqraakadymyt51@gmail.com" class="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm font-bold text-[#0B1F4D] dir-ltr text-left bg-slate-50">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1.5 ml-1">رابط الانضمام لقناة الواتساب</label>
+                        <input type="text" id="set-channel" value="https://whatsapp.com/channel/0029VbCDK6M4IBhBR3jvVY0Y" class="w-full px-4 py-3 border border-slate-200 rounded-xl text-sm text-blue-600 dir-ltr text-left bg-slate-50">
+                    </div>
+                </div>
+                
+                <div class="mt-10 pt-8 border-t border-slate-100">
+                    <h3 class="font-black text-rose-600 mb-5 text-sm flex items-center gap-2"><i class="fas fa-percentage bg-rose-50 p-2 rounded-lg"></i> إعدادات العمولات والنسب المالية التلقائية</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 p-5 bg-rose-50/30 rounded-2xl border border-rose-100/50">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1.5">حصة المدرب (%)</label>
+                            <input type="number" id="set-trainer-pct" value="50" class="w-full px-4 py-3 border border-slate-200 rounded-xl text-lg font-black text-center text-[#0B1F4D] bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1.5">عمولة المسوق (%)</label>
+                            <input type="number" id="set-marketer-pct" value="20" class="w-full px-4 py-3 border border-slate-200 rounded-xl text-lg font-black text-center text-[#0B1F4D] bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1.5">صافي الأكاديمية (%)</label>
+                            <input type="number" value="30" disabled class="w-full px-4 py-3 border border-slate-200 rounded-xl text-lg font-black text-center text-slate-400 bg-slate-100 cursor-not-allowed">
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="button" id="btn-save-settings" onclick="handleSaveSettings()" class="w-full bg-[#0B1F4D] hover:bg-[#132F6B] text-white font-black py-4 rounded-xl text-sm transition shadow-lg mt-8 flex justify-center items-center gap-2"><i class="fas fa-save"></i> حفظ التحديثات واعتمادها فوراً</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="details-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 text-right">
+    <div class="bg-white p-6 rounded-2xl w-full max-w-2xl shadow-2xl overflow-y-auto max-h-[90vh]">
+        <h3 class="font-black text-[#0B1F4D] mb-4 text-lg border-b pb-2"><i class="fas fa-list-alt text-blue-500 ml-2"></i>إدارة تفاصيل: <span id="det-course-name" class="text-emerald-600"></span></h3>
+        <input type="hidden" id="det-course-title">
+        
+        <div class="space-y-4">
+            <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">صورة الغلاف لصفحة الهبوط (يفضل مقاس عرضي)</label>
+                <input type="file" id="det-img" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+            </div>
+            
+            <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">وصف الدورة (نبذة عامة)</label>
+                <textarea id="det-desc" rows="3" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white transition"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">أهداف الدورة (افصل بين كل هدف بـعلامة ناقص -)</label>
+                <textarea id="det-obj" rows="2" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white transition"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">محاور البرنامج (افصل بين كل محور بـعلامة ناقص -)</label>
+                <textarea id="det-syl" rows="2" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white transition"></textarea>
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-600 mb-1">الفئة المستهدفة</label>
+                <input type="text" id="det-target" class="w-full px-4 py-2 border border-slate-200 rounded-xl text-sm bg-slate-50 focus:bg-white transition">
+            </div>
+        </div>
+        
+        <div class="flex gap-3 mt-6">
+            <button onclick="saveCourseDetails(event)" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition shadow">حفظ البيانات</button>
+            <button onclick="closeDetailsModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-bold px-6 py-2.5 rounded-xl transition">إلغاء</button>
+        </div>
+    </div>
+</div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            if (typeof initializeWebsiteLayout === 'function') {
+                setTimeout(initializeWebsiteLayout, 300);
+            }
+        });
+    </script>
+<script src="script.js"></script>
+<div id="data-container"></div>
+
+<footer style="text-align: center; padding: 20px; background: #f8f9fa; border-top: 1px solid #ddd; margin-top: 50px;">
+    <p>2026 أكاديمية اقرأ للاستشارات والتدريب. جميع الحقوق محفوظة</p>
+    <p>هاتف الإدارة: 777644293</p>
+</footer>
+</body>
+</html>
