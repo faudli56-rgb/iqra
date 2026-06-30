@@ -3,34 +3,17 @@
 // ==========================================
 const API_URL = "https://script.google.com/macros/s/AKfycbxMog8gTa9QaTUX_36_RapCB4G0H4lyDTnr_n7X6BA76WDXp0343rfTnGA1yZ-uD8mzYg/exec";
 
-async function callGoogleAPI(action, params = []) {
+// اختبار بسيط للتأكد من الربط عند فتح الموقع
+async function testConnection() {
     try {
-        // تحويل المعاملات إلى JSON String
-        const paramsJson = encodeURIComponent(JSON.stringify(params));
-        const url = API_URL + "?action=" + encodeURIComponent(action) + "&params=" + paramsJson;
-        
-        console.log("🔗 جاري الاتصال بـ:", url);
-        
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
+        const response = await fetch(API_URL + "?action=getCourses");
         const data = await response.json();
-        console.log("✅ تم استلام البيانات:", data);
-        return data;
-        
-    } catch (error) {
-        console.error("❌ انقطع الاتصال بالسيرفر:", error);
-        return { success: false, error: "فشل الاتصال بالسيرفر: " + error.message };
+        console.log("نجح الربط! البيانات المستلمة:", data);
+    } catch (e) {
+        console.error("فشل الربط! تأكد من الرابط أو إعدادات النشر:", e);
     }
 }
+testConnection();
 // ==========================================
 // المتغيرات العالمية والتهيئة
 // ==========================================
