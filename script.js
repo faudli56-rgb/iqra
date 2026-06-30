@@ -3,17 +3,27 @@
 // ==========================================
 const API_URL = "https://script.google.com/macros/s/AKfycbxMog8gTa9QaTUX_36_RapCB4G0H4lyDTnr_n7X6BA76WDXp0343rfTnGA1yZ-uD8mzYg/exec";
 
-// اختبار بسيط للتأكد من الربط عند فتح الموقع
-async function testConnection() {
-    try {
-        const response = await fetch(API_URL + "?action=getCourses");
-        const data = await response.json();
-        console.log("نجح الربط! البيانات المستلمة:", data);
-    } catch (e) {
-        console.error("فشل الربط! تأكد من الرابط أو إعدادات النشر:", e);
-    }
+function loadCourses() {
+    var script = document.createElement('script');
+    // إضافة callback للمتصفح ليقرأ البيانات
+    script.src = API_URL + "?action=getCourses&callback=displayData";
+    document.body.appendChild(script);
 }
-testConnection();
+
+// هذه الدالة هي التي ستستلم البيانات من جوجل
+function displayData(data) {
+    console.log("البيانات وصلت:", data);
+    const container = document.getElementById('courses-grid');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    data.forEach(course => {
+        container.innerHTML += `<div class="card">${course.title}</div>`;
+    });
+}
+
+// تشغيل عند التحميل
+window.onload = loadCourses;
 // ==========================================
 // المتغيرات العالمية والتهيئة
 // ==========================================
