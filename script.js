@@ -5,19 +5,30 @@ const API_URL = "https://script.google.com/macros/s/AKfycbxMog8gTa9QaTUX_36_RapC
 
 async function callGoogleAPI(action, params = []) {
     try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
+        // تحويل المعاملات إلى JSON String
+        const paramsJson = encodeURIComponent(JSON.stringify(params));
+        const url = API_URL + "?action=" + encodeURIComponent(action) + "&params=" + paramsJson;
+        
+        console.log("🔗 جاري الاتصال بـ:", url);
+        
+        const response = await fetch(url, {
+            method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
-                'Origin': 'https://iqra-ebon.vercel.app'
-            },
-            body: JSON.stringify({ action: action, params: params })
+                'Content-Type': 'application/json'
+            }
         });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
+        console.log("✅ تم استلام البيانات:", data);
         return data;
+        
     } catch (error) {
         console.error("❌ انقطع الاتصال بالسيرفر:", error);
-        return { success: false, error: "فشل الاتصال بالسيرفر" };
+        return { success: false, error: "فشل الاتصال بالسيرفر: " + error.message };
     }
 }
 // ==========================================
